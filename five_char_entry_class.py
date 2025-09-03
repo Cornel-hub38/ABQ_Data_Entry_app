@@ -1,0 +1,37 @@
+import tkinter as ttk
+
+
+# five_char_entry_cclass.py
+class FiveCharEntry(ttk.Entry):
+    """An Entry that truncates to five charcters on exit"""
+
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+        self.error = ttk.StringVar()
+        self.configure(
+            validate='all',
+            validatecommand=(self.register(self._validate), '%P'),
+            invalidcommand=(self.register(self._on_invalid), '%P')
+        )
+
+    def _validate(self, proposed):
+        return len(proposed) <= 5
+
+    def _on_invalid(self, proposed):
+        self.error.set(
+            f'{proposed} is too long, only 5 characters allowed!'
+        )
+
+
+root = ttk.Tk()  # page 125
+entry = FiveCharEntry(root)
+error_label = ttk.Label(
+    root, textvariable=entry.error, foreground='red'
+)
+
+
+root.geometry('640x480+200+100')#set the root window size
+
+entry.grid()
+error_label.grid()
+root.mainloop()
