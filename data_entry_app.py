@@ -111,3 +111,40 @@ class DateEntry(ValidatedMixin, ttk.Entry)# Page 137  1052 on 4th September 2025
             valid = False
         return  valid
 
+    def _focusout_validate(self, event):
+        valid = True
+        if not self.get():
+            self.error.set('A value is required')
+            valid = False
+        try:
+            datetime.strptime(self.get(), '%Y-%m-%d')
+        except ValueError:
+            self.error.set('Invalid date')
+            valid = False
+        return valid
+
+class ValiddatedCombobox(ValidatedMixin, ttk.Combobox):   #  P138 on  Thursday 4th September 2025 @1117
+    """A combbox that only takes values from its string lit"""
+
+    def _key_validate(self, proposed, action, **kwargs):
+        valid = True
+        if action == '0':
+            self.set('')
+            return True
+
+        values = self.cget('values')
+        # Do a case-insensitive match against the entered text
+        matching = [
+            x for x in values     #  P139 on  Thursday 4th September 2025 @1130
+            if x.lower().startswith(proposed.lower())
+        ]
+        if len(matching) == '0':
+            valid = False
+        elif len(matching) == '1':
+            self.set(matching[0])
+            self.icursor(tk.END)
+            valid = False
+        return  valid
+
+ #  End/Strat on P139 on  Friday 5th September 2025 @0
+
