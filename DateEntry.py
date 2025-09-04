@@ -52,6 +52,46 @@ class DataEntry(ttk.Entry):
         if event != 'key':
             self._toggle_error('Not a valid date')  # Page 128
 
+######################################################### Page 130
+class Fruit():
+
+    _taste = 'sweet'
+
+    def taste(self):
+        print(f'It tastes {self._taste}')
+
+class PeelableMixin():
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._peeled = False
+
+    def peel(self):
+        self._peeled = True
+
+    def taste(self):
+        if not self._peeled:
+            print('I will peel it first')
+            self.peel()
+        super().taste()
+
+class Plantain(PeelableMixin, Fruit):
+    _taste = 'starchy'
+
+    def peel(self):  # page130:
+        print('It has a tough peel!')
+        super().peel()
+
+
+
+
+
+######################################################### end of Page130
+
+plantain = Plantain()
+plantain.taste()
+
+
 
 
 
