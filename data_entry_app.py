@@ -1,5 +1,7 @@
 # data _entry_app.py   Page 136
 
+from tkinter import ttk
+
 
 class ValidatedMixin:
     """Adds a validation functionality to an input widget"""
@@ -95,7 +97,7 @@ class RequiredEntry(ValidatedMixin, ttk.Entry):   # Page 136
             self.error.set('A value is required')
         return valid
 
-class DateEntry(ValidatedMixin, ttk.Entry)# Page 137  1052 on 4th September 2025
+class DateEntry(ValidatedMixin, ttk.Entry):  # Page 137  1052 on 4th September 2025
     """An Entry that only accepts ISO Date strings"""
 
     def _key_validate(self, action, index, char, **kwarg):
@@ -123,7 +125,7 @@ class DateEntry(ValidatedMixin, ttk.Entry)# Page 137  1052 on 4th September 2025
             valid = False
         return valid
 
-class ValiddatedCombobox(ValidatedMixin, ttk.Combobox):   #  P138 on  Thursday 4th September 2025 @1117
+class ValidatedCombobox(ValidatedMixin, ttk.Combobox):   #  P138 on  Thursday 4th September 2025 @1117
     """A combbox that only takes values from its string lit"""
 
     def _key_validate(self, proposed, action, **kwargs):
@@ -146,5 +148,123 @@ class ValiddatedCombobox(ValidatedMixin, ttk.Combobox):   #  P138 on  Thursday 4
             valid = False
         return  valid
 
- #  End/Strat on P139 on  Friday 5th September 2025 @0
+ #  End/Strat on P139 on  Friday 5th September 2025 @08:56
+    def _focusout_validate(self, **kwargs):
+        valid = True
+        if not self.get():
+            valid = False
+            self.errr.set('A value is required')
+            return valid
+
+# A range-limited spinbox widget --- Page 140
+
+from decimal import Decimal, InvalidOperation
+
+class ValidatedSpinbox(ValidatedMixin, ttk.Spinbox):
+    def __init__(
+            self, *args, from_='-Infinity', to='infinity', **kwargs
+    ):
+
+        super().__init__(*args, from_=from_, to=to, **kwargs)   # Page 141
+        increment = Decimal(str(kwargs.get('increment', '1.0')))
+        self.precision = increment.normalize().as_tuple().exponent
+
+
+    def _key_validate(   #  Reducing Uer Error with Validation and Automation - Page 142
+            self, char, index, current, proposed, action, **kwargs
+    ):
+        if action == '0':
+            return True
+        valid = True
+        min_val = self.cget('from')
+        max_val = self.cget('to')
+        no_negative = min_val >= 0
+        no_decimal = self.precision >= 0
+
+        if any([
+            (char not in '-1234567890'),
+            (char == '-' and (no_negative or index != '0')),
+            (char == '.' and (no_decimal or '.' in current))
+            ]):
+            return  False
+
+# Page 143
+
+        if proposed in '-':   # Page 143
+            return True
+
+        proposed = Decimal(proposed)
+        proposed_precision = proposed.as_tuple().exponent
+
+        if any([
+            (proposed > max_val),
+            (proposed_precision < self.precision)
+        ]):
+            return False
+        return valid
+
+    def _focusout_validate(self, **kwargs):
+        valid = True
+        value = self.get()
+        min_val = self.cget('from')
+        max_val = self.cget('to')
+
+        try:
+            d_value = Decimal(value)
+        except InvalidOperation:
+            self.error.set(f'Invalid number string: {value}')
+            return False
+
+        if d_value < min_val:
+            self.error.set(f'Value is too low (min {min_val})')   # Page 144
+            valid = False
+        if d_value > max_val:
+            self.error.set(f'Value is too high (max {max_val})')
+            valid = False
+        return valid
+
+
+#  validating Radiobutton widgets  - Page 144
+
+class ValidatedRadioGroup(ttk.Frame):
+    """A Validated radio button group"""
+
+    def __int__(
+            self, *args, variable=None, error_var=None,
+             values=None, button_args=None, **kwargs
+    ):
+        super().__init__(*args, **kwargs)
+        self.variable = variable or tk .StringVar()     # Page 145
+        self.error = error_var or tk.StringVar()
+        self.values = values or list()
+        self.button_args = button_args or dict()
+
+        for v in self.values:
+            button = ttk.Radiobutton(
+                self, value=v, text=v,
+                variable=self.variable, **self.button_args
+            )
+            button.pack(
+                side=tk.LEFT, ipadx=10, ipady=2, expand=True, fill='x'
+            )
+        self.bind('<FocusOut>', self.trigger_focusout_validation)
+    def trigger_focusout_validation(self, *_):      # Page 146   Friday 5th September 2025 @1030 - Page 94
+        self.error.set('')
+        if not self.variable.get():
+            self.error.set('A value is required')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
