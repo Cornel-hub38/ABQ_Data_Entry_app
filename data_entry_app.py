@@ -1,6 +1,44 @@
 # data _entry_app.py   Page 136
 
+from tkinter import tk   # Saturday 6th September 2025 @1014 on starting on page 100
 from tkinter import ttk
+from datetime import datetime
+from pathlib import Path
+import csv
+
+
+class BoundText(tk.Text):
+    """ A text widget with a bound variable"""
+    def __init__(self, *args, textvariable=None, **kwargs):  #  Passing in a variable on Page 101
+        super().__init__(*args, **kwargs)
+        self._variable = textvariable
+
+        if self._variable:
+            self.inert('1.0', self._variable.get())
+        if self._variable:  # synchronising the widget to the variable  n Page 101
+            self.insert('1.0', self._variable.get())
+            self._variable.trace_add('write', self._set_content)
+        if self._variable:    # synchronising the variable to the widget: Page 102
+            self.insert('1.0', self._variable.get())
+            self._variable.trace_add('write', self._set_content)
+            self.bind('<<Modified>>', self._set_var)
+
+    def  _set_var(self, *_):    # Page 102
+        """Set the variable to the text content"""
+        if self.edit_modified():    # Page 103
+            content = self.get('1.0', 'end-1chars')
+            self._variable.set(content)
+            self.edit_modified(False)
+
+
+
+    def _set_content(self, *_):   # Page 102
+        """set the text contents to the variable.    create teh callback"""
+        self.delete('1.0', tk.END)
+        self.insert('1.0', self._variable.get())
+
+class LabelInput(tk.Frame):   #  creating a more advanced  LabelInput()    Page 103
+
 
 
 class ValidatedMixin:
@@ -252,6 +290,9 @@ class ValidatedRadioGroup(ttk.Frame):
         self.error.set('')
         if not self.variable.get():
             self.error.set('A value is required')
+
+
+            # Saturday 6th September 2025 @0952    on Page 146
 
 
 
