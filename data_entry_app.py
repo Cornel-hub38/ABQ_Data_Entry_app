@@ -38,6 +38,34 @@ class BoundText(tk.Text):
         self.insert('1.0', self._variable.get())
 
 class LabelInput(tk.Frame):   #  creating a more advanced  LabelInput()    Page 103
+    """A widget containing a label and input together"""
+    def __init__(
+            self, parent, label, var, input_class=ttk.Entry,
+            input_args=None, label_args=None, **kwargs
+    ):
+        super().__init__(parent, **kwargs)
+        input_args = input_args or {}
+        label_args = label_args or {}
+        self.variable = var
+        self.variable.label_widget = self
+
+        if input_class in (ttk.Checkbutton, ttk.Button): #page 104
+            input_args['text'] = label
+        else:
+            self.label =ttk.Label(self, text=label, **label_args)
+            self.label.grid(row=0, column=0, sticky=(tk.W + tk.E))
+
+
+        if input_class in (
+            ttk.Checkbutton, ttk.Button, ttk.Radiobutton
+        ):        # Page 104
+            input_args['variable'] = self.variable
+        else:
+            input_args['textvariable'] = self.variable
+
+        if input_class == ttk.Radiobutton:     # start/end at Saturday 6th September 2025 @1110 Page 105
+            self.input = tk.Frame(self)   #  Moore A. Python GUI programming with tkinter - 2021
+
 
 
 
