@@ -147,6 +147,48 @@ class DataRecordForm(ttk.Frame):         # Creating a form class   Page 106
         ).grid(row=1, column=0, columnspan=3)     #  Page 109     Sunday September 7th, @ 0756
 
 
+        p_info = self._add_frame("Plant data")     #  Page 109
+
+        LabelInput(
+            p_info, "Plants", input_class=ttk.Spinbox,
+            var=self._vars['Plants'],
+            input_args={"from_": 0, "to": 20}
+        ).grid(row=0, column=0)
+        LabelInput(
+            p_info, "Blossoms", input_class=ttk.Spinbox,
+            var=self._vars['Blossoms'],    #    Page 109      Sunday 7th September @0931
+            input_args={"from_": 0, "to": 1000}
+        ).grid(row=0, column=1)     #   Sunday September 7th @ 0933      Page 110
+        LabelInput(
+            p_info, "Fruit", input_class=ttk.Spinbox,
+            var=self._vars["Fruit"],
+            input_args={"from_": 0, "to": 1000}
+        ).grid(row=0, column=2)
+        LabelInput(
+            p_info, "Min Height (cm)",
+            input_class=ttk.Spinbox, var=self._vars['Min Height'],
+            input_args={"from_": 0, "to": 1000, "increment": .01}
+        ).grid(row=1, column=0)
+        LabelInput(
+            p_info, "Max Height (cm)",
+            input_class=ttk.Spinbox, var=self._vars["Max Height"],
+            input_args={"from_": 0, "to": 1000, "increment": .01}
+        ).grid(row=1, column=1)
+        LabelInput(
+            p_info, "Median Height (cm)",    #   Page 110
+            input_class=ttk.Spinbox, var=self._vars['Med Height'],
+            input_args={"from_": 0, "to": 1000, "increment": .01}
+        ).grid(row=1, column=2)  #  Page 110
+        LabelInput(      # Lets add our Notes section      Page 110
+            self, "Notes",
+            input_class=BoundText, var=self._vars["Notes"],
+            input_args={"width": 75, "height": 10}
+        ).grid(sticky=tk.W, row=3, column=0)
+
+        #  Now its time for the buttons
+        buttons =
+
+
 
 
     def __int__(self, *args, **kwargs):
