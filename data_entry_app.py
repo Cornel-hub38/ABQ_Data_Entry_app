@@ -127,8 +127,26 @@ class DataRecordForm(ttk.Frame):         # Creating a form class   Page 106
 
         LabelInput(
             e_info, "Humidity (g/m3)",
+            input_class=ttk.Spinbox, var=sef._vars["Humidity"],
+            input_args={"from_": 0.5, "to": 52.0, "increment": .01}
+        ).grid(row=0, column=0)
+        LabelInput(
+            e_info, "Light (klx)", input_class=ttk.Spinbox,
+            var=self._vars["Light"],
+            input_args={"from_": 0, "to": 100,  "increment": .01}
+        ).grid(row=0, column=1)
+        LabelInput(
+            e_info, "Temperature (C)",
+            input_class=ttk.Spinbox, var=self._vars["Temperature"],
+            input_args={"from_": 4, "to": 40, "increment": .01}
+        ).grid(row=0, column=2)
+        LabelInput(
+            e_info, "Equipment Fault",
+            input_class=ttk.Checkbutton,
+            var=self._vars["Equipment Fault"]
+        ).grid(row=1, column=0, columnspan=3)     #  Page 109
 
-        )
+
 
 
     def __int__(self, *args, **kwargs):
