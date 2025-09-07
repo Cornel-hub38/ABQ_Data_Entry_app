@@ -65,6 +65,102 @@ class LabelInput(tk.Frame):   #  creating a more advanced  LabelInput()    Page 
 
         if input_class == ttk.Radiobutton:     # start/end at Saturday 6th September 2025 @1110 Page 105
             self.input = tk.Frame(self)   #  Moore A. Python GUI programming with tkinter - 2021
+            for v in input_args.pop('values', []):
+                button = ttk.Radiobutton(
+                    self.input, value=v, text=v, **input_args
+                )
+                button.pack(
+                    side=tk.LEFT, ipadx=10, ipady=2, expand=True, fill='x'
+                )
+        else:
+            self.input = input_class(self, **input_args)
+
+            self.input.grid(row=1, column=0, sticky=(tk.W + tk.E))
+            self.columnconfigure(0, weight=1)
+
+    def grid(self, sticky=(tk.E + tk.W), **kwargs):   # Saturday 6th Septembber 2025 @1719    Page 106
+        """Override grid to add default sticky values"""
+        super().grid(sticky, **kwargs)
+
+
+class DataRecordForm(ttk.Frame):         # Creating a form class   Page 106
+    """The form input for our widgets"""
+
+    def _add_frame(self, label, cols=3):
+        """Add a LabelFrame to the form"""
+
+        frame = ttk.LabelFrame(self, text=label)    # Page 107
+        frame.grid(sticky=tk.W + tk.E)
+        for i in range(cols):
+            frame.columnconfigure(i, weight=1)
+        return frame   # Page 108
+
+        r_info = self._add_frame("Record Information")   # Page 108
+
+        LabelInput(
+            r_info, "Date",var=self._vars['Date']
+        ).grid(row=0, column=0)
+        LabelInput(
+            r_info, "Time", input_class=ttk.Combobox,
+            var=self._vars['Time'],
+            input_args={"values": ["8:00", "12:00", "16:00", "20:00"]}
+            ).grid(row=0, column=1)
+        LabelInput(
+            r_info, "Technician", var=self._vars['Technician']
+        ).grid(row=0, column=2)    # Page 108
+
+        LabelInput(
+            r_info, "Lab", input_class=ttk.Radiobutton,
+            var=self._['Lab'],
+            input_args={"values": ["A", "B", "C"]}
+        ).grid(row=1, column=0)
+        LabelInput(
+            r_info, "Plot", input_class=ttk.Combobox,
+            var=self._vars["Plot"],
+            input_args={"values": list(range(1, 21))}
+        ).grid(row=1, column=1)
+        LabelInput(
+            r_info, "Seed Sample", var=self._vars["Seed Sample"]
+        ).grid(row=1, column=2)    #  end of page 108
+
+        e_info = self._add_frame("Environment Data")    #  Page 109
+
+        LabelInput(
+            e_info, "Humidity (g/m3)",
+
+        )
+
+
+    def __int__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self._vars  = {    # Page 107
+            'Date': tk.StringVar(),
+            'Time': tk.StringVar(),
+            'Technician': tk.StringVar(),
+            'Lab': tk.StringVar(),
+            'Plot': tk.IntVar(),
+            'Seed Sample': tk.StringVar(),
+            'Humidity': tk.DoubleVar(),
+            'Light': tk.DoubleVar(),
+            'Temperature': tk.DoubleVar(),
+            'Equipment Fault': tk.BooleanVar(),
+            'Plants': tk.IntVar(),
+            'Blossoms': tk.IntVar(),
+            'Fruit': tk.IntVar(),
+            'Min Height':tk.DoubleVar(),
+            'Max Height': tk.DoubleVar(),
+            'Med Height': tk.DoubleVar(),
+            'Notes': tk.StringVar()
+        }   #  Saturday 6th September 2025 @1745   # page 107
+
+r_info = ttk.LabelFrame(drf, text='Record Information')
+r_info.grid(sticky=(tk.W + tk.E))
+for i in range(3):
+    r_info.columnconfigure(i, weight=1)
+
+
+
+
 
 
 
