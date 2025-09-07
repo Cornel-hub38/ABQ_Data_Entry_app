@@ -144,7 +144,7 @@ class DataRecordForm(ttk.Frame):         # Creating a form class   Page 106
             e_info, "Equipment Fault",
             input_class=ttk.Checkbutton,
             var=self._vars["Equipment Fault"]
-        ).grid(row=1, column=0, columnspan=3)     #  Page 109
+        ).grid(row=1, column=0, columnspan=3)     #  Page 109     Sunday September 7th, @ 0756
 
 
 
