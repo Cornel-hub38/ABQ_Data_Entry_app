@@ -67,7 +67,7 @@ ttk.Label(r_info, text='Plot').grid(row=2, column=1)
 ttk.Combobox(
     r_info,
     textvariable=variables['Plot'],
-    values=list(range(1, 21)
+    values=list(range(1, 21))
 ).grid(row=3, column=1, sticky=(tk.W + tk.E))
 
 variables['Seed Sample'] = tk.StringVar()
@@ -120,6 +120,65 @@ for i in range(3):
 
 variables['Plants'] = tk.IntVar()
 ttk.Label(p_info, text="Plants").grid(row=0, column=0)
+ttk.Spinbox(
+    p_info, textvariable=variables['Plants'],
+    from_=0, to=20, increment=1
+).grid(row=1, column=0, sticky=(tk.W + tk.E))
+
+variables['Blossoms'] = tk.IntVar()
+ttk.Label(p_info, text="Blossoms").grid(row=0, column=1)
+ttk.Spinbox(
+    p_info, textvariable=variables["Blossoms"],
+    from_=0, to=1000, increment=1
+).grid(row=1, column=1, sticky=(tk.W +tk.E))
+variables['Fruit'] = tk.IntVar()          #  Page 71
+ttk.Label(p_info, text="Fruit").grid(row=0, column=2)
+ttk.Spinbox(
+    p_info, textvariable=variables['Fruit'],
+    from_=0, to=1000, increment=1
+).grid(row=1, column=2, sticky=(tk.W + tk.E))
+
+variables["Min Height"] = tk.DoubleVar()
+ttk.Label(p_info, text="Min Height  (cm)").grid(row=2, column=0)
+ttk.Spinbox(
+    p_info, textvariable=variables['Min Height'],
+    from_=0, to=1000, increment=0.01
+).grid(row=3, column=0, sticky=(tk.W + tk.W))
+
+variables['Max Height'] = tk.DoubleVar()
+ttk.Label(p_info, text="Max Height (cm)").grid(row=2, column=1)
+ttk.Spinbox(
+    p_info, textvariable=variables["Max Height"],
+    from_=0, to=1000, increment=0.01
+).grid(row=3, column=1, sticky=(tk.W + tk.E))
+
+
+variables['Med Height'] = tk.DoubleVar()            #              end of Page 71
+ttk.Label(p_info, text="Median Height  (cm)").grid(row=2, column=2)
+ttk.Spinbox(
+    p_info, textvariable=variables["Med Height"],
+    from_=0, to=1000, increment=0.01
+).grid(row=3, column=2, sticky=(tk.W + tk.E))         #    Monday 8th September 2025 @1349   Page 71
+
+ttk.Label(drf, text="Note").grid()   #  Tuesday 9th September 2025 @1757   Page 72
+notes_inp = tk.Text(drf, width=75, height=10)
+notes_inp.grid(sticky=(tk.W + tk.E))
+
+
+#  Add some buttons
+buttons = tk.Frame(drf)
+buttons.grid(sticky=tk.E + tk.W)
+save_button = ttk.Button(buttons, text="Save")
+save_button.pack(side=tk.RIGHT)
+
+reset_button = ttk.Button(buttons, text="Reset")
+reset_button.pack(side=tk.RIGHT)
+
+status_variable = tk.StringVar()
+ttk.Label(
+    root, textvariable=status_variable
+).grid(sticky=tk.W + tk.E, row=99, padx=10)
+
 
 
 
@@ -608,6 +667,49 @@ class ValidatedRadioGroup(ttk.Frame):
 
 
             # Saturday 6th September 2025 @0952    on Page 146
+
+
+    def on_reset(self):   #   Tuesday September 09th 2025 @1813      Page 73
+        """called when reset button is clicked, or after save"""
+
+        for variable in variables.values():
+            if isinstance(variable, tk.BooleanVar):
+                variable.set(False)
+            else:
+                variable.set('')
+        notes_inp.delete('1.0', tk.END)
+
+    reset_button.configure(command=on_reset)
+
+
+def on_save(self):     #   Page 74
+        """Handle save button clicks"""
+
+        global records_saved
+
+        datestring = datetime.today().strftime("%Y-%m-%d")
+        filename = f"abq_data_record_{datestring}.csv"
+        newfile = not Path(filename).exists()   #  Page 75
+
+
+#  Now it time to get the data from the form
+    data = dict()
+    fault = variables["Equipment Fault"].get()
+    for key, variable in variables.items():
+        if fault and key in ('Light', 'Humidity', 'Temperature'):
+            data[key] = ''
+        else:
+            try:
+                data[key] = variable.get()
+            except tk.TclError:
+                status_variable.set(
+                    f'Error in field: {key}. Data was not saved!'
+                )
+                return
+        # get the Text widget contents separately
+        data["Notes"] = notes_inp.get('1.0', tk.END)
+
+
 
 
 
