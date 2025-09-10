@@ -669,7 +669,7 @@ class ValidatedRadioGroup(ttk.Frame):
             # Saturday 6th September 2025 @0952    on Page 146
 
 
-    def on_reset(self):   #   Tuesday September 09th 2025 @1813      Page 73
+def on_reset():   #   Tuesday September 09th 2025 @1813      Page 73
         """called when reset button is clicked, or after save"""
 
         for variable in variables.values():
@@ -679,7 +679,7 @@ class ValidatedRadioGroup(ttk.Frame):
                 variable.set('')
         notes_inp.delete('1.0', tk.END)
 
-    reset_button.configure(command=on_reset)
+reset_button.configure(command=on_reset)
 
 
 def on_save(self):     #   Page 74
@@ -691,23 +691,42 @@ def on_save(self):     #   Page 74
         filename = f"abq_data_record_{datestring}.csv"
         newfile = not Path(filename).exists()   #  Page 75
 
+        records_saved += 1
+        status_variable.set(
+            f'{records_saved} records saved this session'
+        )
+        on_reset()
+
 
 #  Now it time to get the data from the form
-    data = dict()
-    fault = variables["Equipment Fault"].get()
-    for key, variable in variables.items():
-        if fault and key in ('Light', 'Humidity', 'Temperature'):
-            data[key] = ''
-        else:
-            try:
-                data[key] = variable.get()
-            except tk.TclError:
-                status_variable.set(
-                    f'Error in field: {key}. Data was not saved!'
-                )
-                return
-        # get the Text widget contents separately
-        data["Notes"] = notes_inp.get('1.0', tk.END)
+        data = dict()
+        fault = variables["Equipment Fault"].get()
+        for key, variable in variables.items():
+            if fault and key in ('Light', 'Humidity', 'Temperature'):
+                data[key] = ''
+            else:
+                try:
+                    data[key] = variable.get()
+                except tk.TclError:
+                    status_variable.set(
+                        f'Error in field: {key}. Data was not saved!'
+                    )
+                    return
+    # get the Text widget contents separately
+        data["Notes"] = notes_inp.get('1.0', tk.END)    #  Tuesday September 092025 @1856     Page 75
+
+        with open(filename,'a', newline='') as fh:
+            csvwriter = csv.DictWriter(fh, fieldnames=data.keys())  # Page 76
+            if newfile:
+                csvwriter.writeheader()
+            csvwriter.writerow(data)
+
+save_button.configure(command=on_save)
+
+
+
+on_reset()
+root.mainloop()
 
 
 
@@ -717,9 +736,10 @@ def on_save(self):     #   Page 74
 
 
 
-if __name__ == "__main__":   #  Sunday 7th September 2025 @1024    Page 114
-    app = LabelInput()
-    app.mainloop()
+
+#if __name__ == "__main__":   #  Sunday 7th September 2025 @1024    Page 114
+#    app = LabelInput()
+#    app.mainloop()
 
 
 
