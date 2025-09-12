@@ -27,3 +27,24 @@ print("Var1: ", var1.get()[1])    # should print 2
 
 print("Var2: ", var2.get()['b'])   # should print 15
 
+
+
+#  Creating compound widgets     page 94
+
+class LabelInput(tk.Frame):
+    """A label and input combined together"""
+    def __int__(
+            self, parent, label, inp_cls,
+             inp_args, *args, **kwargs
+    ):
+        super().__int__(parent, *args, **kwargs)
+
+        self.label = tk.Label(self, text=label, anchor='w')
+        self.input = inp_cls(self, **inp_args)
+
+
+
+
+
+
+
