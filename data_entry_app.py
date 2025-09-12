@@ -376,7 +376,7 @@ class DataRecordForm(ttk.Frame):         # Creating a form class   Page 106
 
         self.resetbutton = ttk.Button(
             buttons, text="Reset", command=self.reset)
-        self.resetbutton.pack(side=tk.RIGHT)    #    end f page 110
+        self.resetbutton.pack(side=tk.RIGHT)    #    end of page 110
 
 
 
@@ -691,7 +691,7 @@ def on_save(self):     #   Page 74
         filename = f"abq_data_record_{datestring}.csv"
         newfile = not Path(filename).exists()   #  Page 75
 
-        records_saved += 1
+        records_saved += 1                      #  Page 77
         status_variable.set(
             f'{records_saved} records saved this session'
         )
