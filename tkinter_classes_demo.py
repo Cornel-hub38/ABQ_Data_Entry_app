@@ -42,6 +42,30 @@ class LabelInput(tk.Frame):
         self.label = tk.Label(self, text=label, anchor='w')
         self.input = inp_cls(self, **inp_args)
 
+        #  Friday September 12 2025 @1003   Page 95
+
+        self.columnconfigure(1, weight=1)  #  Saturday 13th September 2025, @0753  Page 95
+        self.label.grid(sticky=tk.E + tk.W)
+        self.input.grid(sticky=tk.E + tk.W)
+
+        self.columnconfigure(0, weight=1)
+        self.label.grid(sticky=tk.E + tk.W)
+        self.input.grid(sticky=tk.E + tk.W)
+
+li1 = LabelInput(root, 'Name', tk.Entry, {'bg': 'red'})
+li1.grid()
+
+age_var = tk.IntVar(root, value=21)
+li2 = LabelInput(
+    root, 'Age', tk.Spinbox,
+    {'textvariable': age_var, 'from_': 10, 'to': 150}
+)
+li2.grid()
+
+
+
+
+
 
 
 
